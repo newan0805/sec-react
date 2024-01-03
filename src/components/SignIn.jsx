@@ -6,6 +6,7 @@ const SignIn = ({ onSignIn }) => {
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
   const [captchaVerified, setIsCaptchaVerified] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
 
   const showAlert = (message) => {
@@ -90,24 +91,35 @@ const SignIn = ({ onSignIn }) => {
             <label htmlFor="password" className="form-label">
               Password
             </label>
-            <input
-              type="password"
-              className="form-control"
-              id="password"
-              value={password}
-              onChange={handlePasswordChange}
-            />
+            <div className="input-group">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                className="form-control"
+                id="password"
+                value={password}
+                onChange={handlePasswordChange}
+              />
+            </div>
 
             <label htmlFor="re-password" className="form-label">
               Re-Password
             </label>
-            <input
-              type="password"
-              className="form-control"
-              id="re-password"
-              value={rePassword}
-              onChange={handleRePasswordChange}
-            />
+            <div className="input-group">
+              <input
+                type={showPassword ? 'text' : 'password'}
+                className="form-control"
+                id="re-password"
+                value={rePassword}
+                onChange={handleRePasswordChange}
+              />
+
+              <button
+                className="btn btn-outline-secondary"
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? 'Hide' : 'Show'}
+              </button>
+            </div>
           </div>
 
           <div className="mb-3 mt-2">
@@ -119,7 +131,6 @@ const SignIn = ({ onSignIn }) => {
                 aria-valuenow={getPasswordStrength()}
                 aria-valuemin="0"
                 aria-valuemax="100"
-                onChange={getPasswordStrength()}
               >
                 {getPasswordStrength()}%
               </div>
