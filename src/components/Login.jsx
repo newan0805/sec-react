@@ -8,7 +8,6 @@ const Login = ({ onLogin }) => {
   const [showCaptcha, setShowCaptcha] = useState(false);
 
   const handleLogin = () => {
-    // Mocked login - retrieve credentials from localStorage
     const storedCredentials = JSON.parse(localStorage.getItem('userCredentials'));
 
     if (
@@ -17,15 +16,11 @@ const Login = ({ onLogin }) => {
       storedCredentials.password === password
     ) {
       console.log('Login successful!');
-      // Reset login attempts on successful login
       setLoginAttempts(0);
-      // Implement actual login logic here, e.g., redirect to dashboard
     } else {
       console.log('Invalid credentials!');
-      // Increase login attempts
       setLoginAttempts(loginAttempts + 1);
 
-      // Show CAPTCHA after 3 consecutive login failures
       if (loginAttempts >= 2) {
         setShowCaptcha(true);
       }
@@ -33,15 +28,13 @@ const Login = ({ onLogin }) => {
   };
 
   const handleCaptchaSuccess = () => {
-    // Callback when the CAPTCHA is successfully verified
     console.log('Captcha verified!');
-    setShowCaptcha(false); // Reset CAPTCHA state
+    setShowCaptcha(false);
   };
 
   return (
-    <div className="container">
       <div className="row mt-5">
-        <div className="col-md-6 offset-md-3">
+        <div className="col-md-4 offset-md-4">
           <h2 className="mb-4">Login</h2>
           <form>
             <div className="mb-3">
@@ -74,7 +67,6 @@ const Login = ({ onLogin }) => {
           </form>
         </div>
       </div>
-    </div>
   );
 };
 

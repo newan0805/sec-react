@@ -5,7 +5,7 @@ import Login from './components/Login';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import './styles/signin.css'
+// import './styles/signin.css'
 
 const App = () => {
   const handleSignIn = () => {
@@ -18,9 +18,8 @@ const App = () => {
 
   return (
     <Router>
-      <div className="container">
-        { /* <nav className="navbar navbar-expand-lg navbar-light bg-light">
-          <div className="container">
+      <div>
+        <nav className="p-2 navbar navbar-expand-lg navbar-light bg-light">
             <Link className="navbar-brand" to="/">Secure login</Link>
             <div className="collapse navbar-collapse">
               <ul className="navbar-nav ml-auto">
@@ -31,10 +30,8 @@ const App = () => {
                   <Link className="nav-link" to="/login">Login</Link>
                 </li>
               </ul>
-            </div>
           </div>
         </nav>
-        <hr /> */ }
         <Routes>
         <Route
           path="/signin"
