@@ -5,6 +5,7 @@ const SignIn = ({ onSignIn }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
+  const [email, setEmail] = useState('');
   const [captchaVerified, setIsCaptchaVerified] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [alertMessage, setAlertMessage] = useState('');
@@ -13,16 +14,16 @@ const SignIn = ({ onSignIn }) => {
     setAlertMessage(message);
     setTimeout(() => {
       setAlertMessage('');
-    }, 5000); // Hide the alert after 5 seconds
+    }, 8000);
   };
 
   const handleSignIn = () => {
-    if (!isValidPassword() || !captchaVerified) {
-      showAlert('Please ensure the password is valid and captcha is verified.');
+    if (!isValidEmail(email) || !isValidPassword() || !captchaVerified) {
+      showAlert('Please ensure the email, password, and captcha are valid.');
       return;
     }
 
-    localStorage.setItem('userCredentials', JSON.stringify({ username, password }));
+    localStorage.setItem('userCredentials', JSON.stringify({ username, password, email }));
     onSignIn();
   };
 
@@ -36,16 +37,28 @@ const SignIn = ({ onSignIn }) => {
     setRePassword(newRePassword);
   };
 
+  const handleEmailChange = (e) => {
+    const newEmail = e.target.value;
+    setEmail(newEmail);
+  };
+
+  const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
   const isValidPassword = () => {
     const minLength = 8;
     const containsUsername = password.toLowerCase().includes(username.toLowerCase());
     const isSimplePassword = password.toLowerCase() === 'password';
+    const hasSpecialCharacters = /[!@#$%^&*]/.test(password);
 
     return (
       password.length >= minLength &&
       password === rePassword &&
       !containsUsername &&
-      !isSimplePassword
+      !isSimplePassword &&
+      hasSpecialCharacters
     );
   };
 
@@ -57,9 +70,8 @@ const SignIn = ({ onSignIn }) => {
     const strength = (password.length / minLength) * 100;
 
     if (password.length < minLength) return 0;
-    if (containsUsername || isSimplePassword) return 25;
+    // if (containsUsername || isSimplePassword) return 8;
 
-    // Limit strength to a maximum of 100%
     return Math.min(strength, 100);
   };
 
@@ -75,15 +87,15 @@ const SignIn = ({ onSignIn }) => {
           )}
 
           <div className="mb-3">
-            <label htmlFor="username" className="form-label">
-              Username
+            <label htmlFor="email" className="form-label">
+              Email
             </label>
             <input
               type="text"
               className="form-control"
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              id="email"
+              value={email}
+              onChange={handleEmailChange}
             />
           </div>
 
@@ -100,7 +112,9 @@ const SignIn = ({ onSignIn }) => {
                 onChange={handlePasswordChange}
               />
             </div>
+          </div>
 
+          <div className="mb-3">
             <label htmlFor="re-password" className="form-label">
               Re-Password
             </label>
@@ -112,11 +126,11 @@ const SignIn = ({ onSignIn }) => {
                 value={rePassword}
                 onChange={handleRePasswordChange}
               />
-
               <button
                 className="btn btn-outline-secondary"
                 type="button"
-                onClick={() => setShowPassword(!showPassword)}>
+                onClick={() => setShowPassword(!showPassword)}
+              >
                 {showPassword ? 'Hide' : 'Show'}
               </button>
             </div>
@@ -138,15 +152,15 @@ const SignIn = ({ onSignIn }) => {
           </div>
 
           <Captcha onSuccess={() => setIsCaptchaVerified(true)} />
-          {isValidPassword() && (
-            <div className="valid-feedback">Password is valid!</div>
+          {isValidPassword() && isValidEmail(email) && (
+            <div className="valid-feedback">Email and Password are valid!</div>
           )}
 
           <button
             type="button"
             className="btn btn-primary mt-3"
             onClick={handleSignIn}
-            disabled={!isValidPassword() || !captchaVerified}
+            disabled={!isValidPassword() || !isValidEmail(email) || !captchaVerified}
           >
             Sign In
           </button>
