@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
 import SignIn from './components/SignIn';
 import Login from './components/Login';
+import Profile from './components/Profile';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -40,6 +41,10 @@ const App = () => {
           <Route
             path="/login"
             element={<Login onLogin={handleLogin} />}
+          />
+          <Route
+            path="/"
+            element={<Profile onLogin={handleLogin} />}
           />
         </Routes>
       </div>

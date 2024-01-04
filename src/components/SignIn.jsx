@@ -14,10 +14,12 @@ const SignIn = ({ onSignIn }) => {
     setAlertMessage(message);
     setTimeout(() => {
       setAlertMessage('');
-    }, 8000);
+    }, 6000);
   };
 
-  const handleSignIn = () => {
+  const handleSignIn = (e) => {
+    e.preventDefault();
+    console.log("handle signin: ",isValidEmail(email),isValidPassword(password),captchaVerified)
     if (!isValidEmail(email) || !isValidPassword() || !captchaVerified) {
       showAlert('Please ensure the email, password, and captcha are valid.');
       return;
@@ -47,11 +49,13 @@ const SignIn = ({ onSignIn }) => {
     return emailRegex.test(email);
   };
 
-  const isValidPassword = () => {
+  const isValidPassword = (pass) => {
     const minLength = 8;
     const containsUsername = password.toLowerCase().includes(username.toLowerCase());
     const isSimplePassword = password.toLowerCase() === 'password';
     const hasSpecialCharacters = /[!@#$%^&*]/.test(password);
+
+    console.log("valid pass: ",containsUsername, isSimplePassword, hasSpecialCharacters)
 
     return (
       password.length >= minLength &&
@@ -70,7 +74,7 @@ const SignIn = ({ onSignIn }) => {
     const strength = (password.length / minLength) * 100;
 
     if (password.length < minLength) return 0;
-    // if (containsUsername || isSimplePassword) return 8;
+    // if (containsUsername || isSimplePassword) return 100;
 
     return Math.min(strength, 100);
   };
@@ -152,7 +156,7 @@ const SignIn = ({ onSignIn }) => {
           </div>
 
           <Captcha onSuccess={() => setIsCaptchaVerified(true)} />
-          {isValidPassword() && isValidEmail(email) && (
+          {isValidPassword(password) && isValidEmail(email) && (
             <div className="valid-feedback">Email and Password are valid!</div>
           )}
 
@@ -160,7 +164,7 @@ const SignIn = ({ onSignIn }) => {
             type="button"
             className="btn btn-primary mt-3"
             onClick={handleSignIn}
-            disabled={!isValidPassword() || !isValidEmail(email) || !captchaVerified}
+            // disabled={!isValidPassword() || !isValidEmail(email) || !captchaVerified}
           >
             Sign In
           </button>
