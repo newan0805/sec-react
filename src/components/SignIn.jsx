@@ -49,7 +49,7 @@ const SignIn = ({ onSignIn }) => {
     return emailRegex.test(email);
   };
 
-  const isValidPassword = (pass) => {
+  const isValidPassword = () => {
     const minLength = 8;
     const containsUsername = password.toLowerCase().includes(username.toLowerCase());
     const isSimplePassword = password.toLowerCase() === 'password';
@@ -156,7 +156,7 @@ const SignIn = ({ onSignIn }) => {
           </div>
 
           <Captcha onSuccess={() => setIsCaptchaVerified(true)} />
-          {isValidPassword(password) && isValidEmail(email) && (
+          {isValidPassword() && isValidEmail(email) && (
             <div className="valid-feedback">Email and Password are valid!</div>
           )}
 
