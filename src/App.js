@@ -6,6 +6,7 @@ import Login from './components/Login';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import './styles/signin.css'
+import Profile from './components/Profile';
 
 const App = () => {
   const handleSignIn = () => {
@@ -43,6 +44,10 @@ const App = () => {
           <Route
             path="/login"
             element={<Login onLogin={handleLogin} />}
+          />
+          <Route
+            path="/"
+            element={<Profile onLogin={handleLogin} />}
           />
         </Routes>
       </div>

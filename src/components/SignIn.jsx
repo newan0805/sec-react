@@ -10,7 +10,7 @@ const SignIn = ({ onSignIn }) => {
 
   const handleSignIn = () => {
     setIsCaptchaVerified = true;
-    localStorage.setItem('userCredentials', JSON.stringify({ username, password }));
+    localStorage.setItem('userCredentials', JSON.stringify({ "username": username, "password": password }));
     onSignIn();
   };
 
@@ -73,7 +73,7 @@ const SignIn = ({ onSignIn }) => {
             {isValidPassword() && (
               <div className="valid-feedback">Password is valid!</div>
             )}
-            <button type="button" className="btn btn-primary mt-3" onClick={handleSignIn} disabled={!isValidPassword() && captchaVarified? true : ''}>
+            <button type="button" className="btn btn-primary mt-3" onClick={handleSignIn} disabled={!isValidPassword() && captchaVarified? true : false}>
               Sign In
             </button>
           </form>
