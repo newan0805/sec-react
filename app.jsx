@@ -11,7 +11,7 @@ const app = express();
 const port = 8000;
 
 app.use(cors({
-  origin: ['*', 'http://192.168.8.118', 'http://192.168.8.123'],
+  origin: ['*', 'http://localhost:3000', 'http://192.168.8.118', 'http://192.168.8.123'],
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
   optionsSuccessStatus: 204,
@@ -49,44 +49,68 @@ const authenticateUser = (req, res, next) => {
   });
 };
 
-app.get('/', async (req, res) => {
+app.all('/', async (req, res) => {
   res.json({ "Server": "Server is up and running!" });
 });
 
 // Sign-up endpoint
 app.post('/signup', async (req, res) => {
-  const { username, password } = req.body;
+  const { email, username, password } = req.body;
   const userId = uuidv4();
+
+  console.log(email, username, password)
+
+  if ((!email && !username) || !password) {
+    return res.status(400).json({ message: 'Invalid input data' });
+  }
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ message: 'Invalid email format', field: 'email' });
+  }
 
   // Load existing users from file
   const users = jsonfile.readFileSync(usersFile);
 
   // Check if username already exists
-  if (users.some(user => user.username === username)) {
-    return res.status(400).json({ message: 'Username already exists' });
+  const user = users.find(u => u.username === username) || users.find(u => u.email === email);
+  if (user) {
+    console.log(user)
+    return res.status(400).json({ message: 'User already exists' });
   }
 
   // Hash the password
   const hashedPassword = await bcrypt.hash(password, 10);
 
   // Add new user
-  users.push({ userId, username, password: hashedPassword });
+  users.push({ userId, email, username, password: hashedPassword });
 
   // Save updated users to file
   jsonfile.writeFileSync(usersFile, users);
 
-  res.json({ userId, username });
+  // Create JWT token
+  // const token = jwt.sign({ userId: user.userId }, jwtSecret, { expiresIn: '1h' });
+
+  // req.session.userId = user.userId;
+  // req.session.token = token;
+
+  res.json({ userId, email, username });
 });
 
 // Login endpoint
 app.post('/login', async (req, res) => {
-  const { username, password } = req.body;
+  const { email, username, password } = req.body;
+
+  if ((!email && !username) || !password) {
+    return res.status(400).json({ message: 'Invalid input data. Please provide email or username and password.', field: 'all' });
+  }
 
   // Load existing users from file
   const users = jsonfile.readFileSync(usersFile);
 
-  // Find user by username
-  const user = users.find(u => u.username === username);
+  // Find user by username or email
+  const user = users.find(u => u.username === username) || users.find(u => u.email === email);
+  // console.log(user)
 
   if (!user || !(await bcrypt.compare(password, user.password))) {
     return res.status(401).json({ message: 'Invalid username or password' });
@@ -99,7 +123,7 @@ app.post('/login', async (req, res) => {
   req.session.userId = user.userId;
   req.session.token = token;
 
-  res.json({ userId: user.userId, username, token });
+  res.json({uuid: user.userId, email: user.email, username: user.username, token: token });
 });
 
 // Logout endpoint
@@ -116,8 +140,8 @@ app.get('/protected', authenticateUser, (req, res) => {
 });
 
 // Profile route - requires authentication
-app.get('/profile', authenticateUser, (req, res) => {
-  const userId = req.session.userId;
+app.get('/profile', (req, res) => {
+  const userId = req.session.userId; // Assuming you have a session with userId
 
   // Load existing users from file
   const users = jsonfile.readFileSync(usersFile);
@@ -129,7 +153,8 @@ app.get('/profile', authenticateUser, (req, res) => {
     return res.status(404).json({ message: 'User not found' });
   }
 
-  res.json({ userId: userProfile.userId, username: userProfile.username });
+  res.json({uuid: users.userId, email: users.email, username: users.username});
+
 });
 
 app.listen(port, () => {
