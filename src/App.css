@@ -1,5 +1,27 @@
 .App {
-  text-align: center;
+  height: 100vh;
+  width: 100%;
+  background-color: #1b1e22e1;
+  color: azure;
+}
+
+nav {
+  background-color: #02020287;
+  color: aliceblue;
+  border-bottom-left-radius: 13px;
+  border-bottom-right-radius: 13px;
+}
+
+nav .nav-item ::hover {
+  /* z-index: 10%; */
+  padding-left: 4px;
+}
+
+form {
+  background-color: #282c34e1;
+  padding: 50px;
+  margin: 10px;
+  box-shadow: 10px 10px 10px 10px #61dafb;
 }
 
 .App-logo {
