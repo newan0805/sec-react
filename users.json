@@ -1,1 +1,14 @@
-[{"userId":"5699a132-2649-4ebe-8144-cf5e781b3960","email":"newan0805@gmail.com","username":"newan0805","password":"$2b$10$v2mcisfM5rqPWoGlfyAKfO9aZosFGb/.CDVNRsR0ozjTt9teJYnyK"},{"userId":"7b565c18-a2cc-4123-a11e-09e36beda8f5","email":"newan0805@gmail.c","username":"newan080","password":"$2b$10$U8Xk659uaevmgxhMG04BUOO5CEAlq1lAfduhzddoI82DsUpYQ8BAy"}]
+[
+    {
+        "userId": "5699a132-2649-4ebe-8144-cf5e781b3960",
+        "email": "newan0805@gmail.com",
+        "username": "newan0805",
+        "password": "$2b$10$v2mcisfM5rqPWoGlfyAKfO9aZosFGb/.CDVNRsR0ozjTt9teJYnyK"
+    },
+    {
+        "userId": "7b565c18-a2cc-4123-a11e-09e36beda8f5",
+        "email": "newan0805@gmail.c",
+        "username": "newan080",
+        "password": "$2b$10$U8Xk659uaevmgxhMG04BUOO5CEAlq1lAfduhzddoI82DsUpYQ8BAy"
+    }
+]

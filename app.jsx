@@ -31,7 +31,7 @@ if (!fs.existsSync(usersFile)) {
   jsonfile.writeFileSync(usersFile, []);
 }
 
-// Middleware to check if the user is authenticated
+// Middleware 
 const authenticateUser = (req, res, next) => {
   const token = req.headers.authorization;
   const sessionUserId = req.session.userId;
